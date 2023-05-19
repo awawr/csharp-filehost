@@ -15,7 +15,7 @@ namespace FileHost
         private static readonly HttpListener s_listener = new HttpListener();
         private static readonly Random s_random = new Random();
         private static readonly byte[] s_mainPage = Utils.GetEmbeddedResource("FileHost.Resources.shelf.html");
-        private static readonly string[] s_imageExtensions = { ".png", ".jpg", ".jpeg", ".gif" };
+        private static readonly string[] s_defExtensions = { ".txt", ".png", ".jpg", ".jpeg", ".gif" };
 
         private static void Main()
         {
@@ -59,19 +59,11 @@ namespace FileHost
                             string extension = Path.GetExtension(file);
                             if (File.Exists(file) && extension != ".log")
                             {
-                                switch (extension)
-                                {
-                                    case ".mp4":
-                                        response.ContentType = "video/mp4";
-                                        break;
-                                    case ".pdf":
-                                        response.ContentType = "application/pdf";
-                                        break;
-                                    case ".txt":
-                                        response.ContentType = "text/plain";
-                                        break;
-                                }
-                                if (!s_imageExtensions.Contains(extension))
+                                if (extension == ".mp4")
+                                    response.ContentType = "video/mp4";
+                                else if (extension == ".pdf")
+                                    response.ContentType = "application/pdf";
+                                else if (!s_defExtensions.Contains(extension))
                                     response.ContentType = "application/octet-stream";
                                 respData = Utils.Decompress(File.ReadAllBytes(file));
                             }
