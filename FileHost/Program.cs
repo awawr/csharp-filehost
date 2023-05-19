@@ -36,17 +36,15 @@ namespace FileHost
 
             HttpListenerRequest request = context.Request;
             HttpListenerResponse response = context.Response;
-            if (request.HttpMethod == "HEAD")
-            {
-                response.StatusCode = (int)HttpStatusCode.OK;
-                response.Close();
-                return;
-            }
             byte[]? respData = null;
             try
             {
                 switch (request.HttpMethod)
                 {
+                    case "HEAD":
+                        response.StatusCode = (int)HttpStatusCode.OK;
+                        response.Close();
+                        return;
                     case "GET":
                         {
                             string path = request.Url.AbsolutePath.TrimStart('/');
